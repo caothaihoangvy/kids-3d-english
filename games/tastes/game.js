@@ -1,6 +1,6 @@
 /* ============================================
    Food Tastes Game - Kids 3D English
-   Learn about: sweet, salty, sour, bitter, spicy
+   Learn about: sweet, sour, spicy, salty, bitter, yummy, yucky
    ============================================ */
 
 (function() {
@@ -13,28 +13,43 @@
   // Game Data
   // ============================================
 
-  const TASTES = ['sweet', 'salty', 'sour', 'bitter', 'spicy'];
+  const TASTES = ['sweet', 'sour', 'spicy', 'salty', 'bitter', 'yummy', 'yucky'];
 
   // Taste emojis for visual hint
   const TASTE_EMOJIS = {
     sweet: '&#127852;',    // Candy
-    salty: '&#129472;',    // Salt
     sour: '&#128530;',     // Face puckering
-    bitter: '&#128556;',   // Yuck face
-    spicy: '&#128293;'     // Fire
+    spicy: '&#128293;',    // Fire
+    salty: '&#129472;',    // Salt
+    bitter: '&#128547;',   // Confounded face
+    yummy: '&#128523;',    // Yum face with tongue
+    yucky: '&#129314;'     // Nauseated face
   };
 
   // Foods and their tastes
   const FOODS = [
     // Sweet foods
-    { name: 'candy', taste: 'sweet', icon: '&#127852;' },
-    { name: 'cake', taste: 'sweet', icon: '&#127874;' },
+    { name: 'chocolate cake', taste: 'sweet', icon: '&#127874;' },
     { name: 'ice cream', taste: 'sweet', icon: '&#127846;' },
+    { name: 'pancake', taste: 'sweet', icon: '&#129374;' },
+    { name: 'candy', taste: 'sweet', icon: '&#127852;' },
     { name: 'cookie', taste: 'sweet', icon: '&#127850;' },
     { name: 'honey', taste: 'sweet', icon: '&#127855;' },
-    { name: 'chocolate', taste: 'sweet', icon: '&#127851;' },
-    { name: 'banana', taste: 'sweet', icon: '&#127820;' },
-    { name: 'watermelon', taste: 'sweet', icon: '&#127817;' },
+
+    // Sour foods
+    { name: 'lemon', taste: 'sour', icon: '&#127819;' },
+    { name: 'lime', taste: 'sour', icon: '&#127818;' },
+    { name: 'pineapple', taste: 'sour', icon: '&#127821;' },
+    { name: 'pickle', taste: 'sour', icon: '&#129362;' },
+    { name: 'green apple', taste: 'sour', icon: '&#127823;' },
+    { name: 'grapefruit', taste: 'sour', icon: '&#129386;' },
+
+    // Spicy foods
+    { name: 'chili', taste: 'spicy', icon: '&#127798;' },
+    { name: 'hot sauce', taste: 'spicy', icon: '&#129746;' },
+    { name: 'pepper', taste: 'spicy', icon: '&#127798;' },
+    { name: 'curry', taste: 'spicy', icon: '&#127835;' },
+    { name: 'wasabi', taste: 'spicy', icon: '&#127843;' },
 
     // Salty foods
     { name: 'chips', taste: 'salty', icon: '&#127839;' },
@@ -42,37 +57,35 @@
     { name: 'popcorn', taste: 'salty', icon: '&#127871;' },
     { name: 'fries', taste: 'salty', icon: '&#127839;' },
     { name: 'crackers', taste: 'salty', icon: '&#129372;' },
-    { name: 'cheese', taste: 'salty', icon: '&#129472;' },
-
-    // Sour foods
-    { name: 'lemon', taste: 'sour', icon: '&#127819;' },
-    { name: 'lime', taste: 'sour', icon: '&#127818;' },
-    { name: 'grapefruit', taste: 'sour', icon: '&#129386;' },
-    { name: 'pickle', taste: 'sour', icon: '&#129362;' },
-    { name: 'vinegar', taste: 'sour', icon: '&#127863;' },
-    { name: 'green apple', taste: 'sour', icon: '&#127823;' },
 
     // Bitter foods
-    { name: 'dark chocolate', taste: 'bitter', icon: '&#127851;' },
     { name: 'coffee', taste: 'bitter', icon: '&#9749;' },
+    { name: 'dark chocolate', taste: 'bitter', icon: '&#127851;' },
     { name: 'broccoli', taste: 'bitter', icon: '&#129382;' },
-    { name: 'kale', taste: 'bitter', icon: '&#129388;' },
-    { name: 'grapefruit peel', taste: 'bitter', icon: '&#129386;' },
+    { name: 'medicine', taste: 'bitter', icon: '&#128138;' },
+    { name: 'green tea', taste: 'bitter', icon: '&#127861;' },
 
-    // Spicy foods
-    { name: 'chili', taste: 'spicy', icon: '&#127798;' },
-    { name: 'hot sauce', taste: 'spicy', icon: '&#129746;' },
-    { name: 'jalapeño', taste: 'spicy', icon: '&#127798;' },
-    { name: 'wasabi', taste: 'spicy', icon: '&#129388;' },
-    { name: 'pepper', taste: 'spicy', icon: '&#127798;' },
-    { name: 'curry', taste: 'spicy', icon: '&#127835;' }
+    // Yummy foods (delicious, tasty)
+    { name: 'burger', taste: 'yummy', icon: '&#127828;' },
+    { name: 'pizza', taste: 'yummy', icon: '&#127829;' },
+    { name: 'apple', taste: 'yummy', icon: '&#127822;' },
+    { name: 'sandwich', taste: 'yummy', icon: '&#129386;' },
+    { name: 'spaghetti', taste: 'yummy', icon: '&#127837;' },
+    { name: 'taco', taste: 'yummy', icon: '&#127790;' },
+
+    // Yucky foods (gross, bad)
+    { name: 'rotten eggs', taste: 'yucky', icon: '&#129370;' },
+    { name: 'spoiled milk', taste: 'yucky', icon: '&#129371;' },
+    { name: 'moldy bread', taste: 'yucky', icon: '&#127838;' },
+    { name: 'garbage', taste: 'yucky', icon: '&#128465;' },
+    { name: 'mud', taste: 'yucky', icon: '&#128169;' }
   ];
 
   // ============================================
   // Game State
   // ============================================
 
-  const TOTAL_ROUNDS = 5;
+  const TOTAL_ROUNDS = 7;
 
   let gameState = {
     currentRound: 0,

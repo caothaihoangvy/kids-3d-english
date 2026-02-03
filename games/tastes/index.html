@@ -88,6 +88,22 @@
       background: #FF5722;
     }
 
+    .choice-btn[data-taste="yummy"] {
+      border-color: #8BC34A;
+    }
+    .choice-btn[data-taste="yummy"]:hover,
+    .choice-btn[data-taste="yummy"].correct {
+      background: #8BC34A;
+    }
+
+    .choice-btn[data-taste="yucky"] {
+      border-color: #9C27B0;
+    }
+    .choice-btn[data-taste="yucky"]:hover,
+    .choice-btn[data-taste="yucky"].correct {
+      background: #9C27B0;
+    }
+
     /* Taste emoji hints */
     .taste-emoji {
       margin-left: 8px;
@@ -122,7 +138,7 @@
 
       <!-- Round Indicator -->
       <div class="round-indicator">
-        Round <span id="current-round">1</span> of <span id="total-rounds">5</span>
+        Round <span id="current-round">1</span> of <span id="total-rounds">7</span>
       </div>
 
       <!-- 3D Card Container -->
@@ -154,7 +170,7 @@
       <h2>&#127881; Yummy! &#127881;</h2>
       <div class="final-stars" id="final-stars"></div>
       <p id="final-message">You know your tastes!</p>
-      <p>You got <span id="final-score">0</span> out of <span id="final-total">5</span> correct!</p>
+      <p>You got <span id="final-score">0</span> out of <span id="final-total">7</span> correct!</p>
       <button class="play-btn" id="play-again-btn">Play Again!</button>
     </div>
   </div>
