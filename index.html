@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kids 3D English - Learn and Play!</title>
+  <link rel="stylesheet" href="shared/ui.css">
+  <style>
+    /* Additional styles for index page */
+    .welcome-text {
+      text-align: center;
+      color: white;
+      margin-bottom: 20px;
+    }
+
+    .welcome-text h1 {
+      font-size: 2.5rem;
+      text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+      margin-bottom: 10px;
+    }
+
+    .welcome-text p {
+      font-size: 1.3rem;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .mascot {
+      font-size: 4rem;
+      animation: bounce 2s ease-in-out infinite;
+    }
+
+    .game-card .best-stars {
+      margin-top: 15px;
+      font-size: 1.5rem;
+    }
+
+    .progress-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 20px;
+      background: rgba(76, 175, 80, 0.1);
+      border-radius: 10px;
+      margin: 10px 0;
+    }
+
+    .progress-item span {
+      font-size: 1.2rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <!-- Welcome Section -->
+    <div class="welcome-text">
+      <div class="mascot">&#129302;</div>
+      <h1>Kids 3D English</h1>
+      <p>Learn English words while having fun!</p>
+    </div>
+
+    <!-- Header with toggles -->
+    <header class="header">
+      <h1>&#127919; Pick a Game!</h1>
+      <div class="toggles">
+        <button id="sound-toggle" class="toggle-btn active" title="Sound On/Off">
+          &#128266;
+        </button>
+        <button id="voice-toggle" class="toggle-btn active" title="Voice On/Off">
+          &#128483;
+        </button>
+      </div>
+    </header>
+
+    <!-- Game Cards -->
+    <div class="game-cards">
+      <!-- Materials Game -->
+      <a href="games/materials/index.html" class="game-card" id="card-materials">
+        <div class="game-card-icon">&#129717;</div>
+        <h2>Materials</h2>
+        <p>Learn about wood, paper, plastic, and more!</p>
+        <div class="best-stars">
+          Best: <span id="stars-materials">&#9733;&#9733;&#9733;</span>
+        </div>
+      </a>
+
+      <!-- Tastes Game -->
+      <a href="games/tastes/index.html" class="game-card" id="card-tastes">
+        <div class="game-card-icon">&#127853;</div>
+        <h2>Food Tastes</h2>
+        <p>Sweet, salty, sour - what does it taste like?</p>
+        <div class="best-stars">
+          Best: <span id="stars-tastes">&#9733;&#9733;&#9733;</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- Progress Section -->
+    <section class="progress-section">
+      <h2>&#127942; Your Progress</h2>
+      <div id="progress-list">
+        <div class="progress-item">
+          <span>&#129717; Materials</span>
+          <span id="progress-materials" class="stars"></span>
+        </div>
+        <div class="progress-item">
+          <span>&#127853; Food Tastes</span>
+          <span id="progress-tastes" class="stars"></span>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script src="shared/ui.js"></script>
+  <script>
+    // Update progress display from localStorage
+    document.addEventListener('DOMContentLoaded', () => {
+      const { Settings, renderStars, Audio } = window.GameUtils;
+
+      // Materials game stars
+      const materialStars = Settings.getBestStars('materials');
+      document.getElementById('stars-materials').innerHTML = renderStars(materialStars);
+      document.getElementById('progress-materials').innerHTML = renderStars(materialStars);
+
+      // Tastes game stars
+      const tastesStars = Settings.getBestStars('tastes');
+      document.getElementById('stars-tastes').innerHTML = renderStars(tastesStars);
+      document.getElementById('progress-tastes').innerHTML = renderStars(tastesStars);
+
+      // Play sound on card click
+      document.querySelectorAll('.game-card').forEach(card => {
+        card.addEventListener('click', () => {
+          Audio.init();
+          Audio.playClick();
+        });
+      });
+    });
+  </script>
+</body>
+</html>
