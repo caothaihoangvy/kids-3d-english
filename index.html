@@ -92,6 +92,16 @@
           Best: <span id="stars-tastes">&#9733;&#9733;&#9733;</span>
         </div>
       </a>
+
+      <!-- Five Senses Game -->
+      <a href="games/senses/index.html" class="game-card" id="card-senses">
+        <div class="game-card-icon">&#128064;</div>
+        <h2>Five Senses</h2>
+        <p>See, hear, smell, taste, or touch?</p>
+        <div class="best-stars">
+          Best: <span id="stars-senses">&#9733;&#9733;&#9733;</span>
+        </div>
+      </a>
     </div>
 
     <!-- Progress Section -->
@@ -105,6 +115,10 @@
         <div class="progress-item">
           <span>&#127853; Food Tastes</span>
           <span id="progress-tastes" class="stars"></span>
+        </div>
+        <div class="progress-item">
+          <span>&#128064; Five Senses</span>
+          <span id="progress-senses" class="stars"></span>
         </div>
       </div>
     </section>
@@ -125,6 +139,11 @@
       const tastesStars = Settings.getBestStars('tastes');
       document.getElementById('stars-tastes').innerHTML = renderStars(tastesStars);
       document.getElementById('progress-tastes').innerHTML = renderStars(tastesStars);
+
+      // Five Senses game stars
+      const sensesStars = Settings.getBestStars('senses');
+      document.getElementById('stars-senses').innerHTML = renderStars(sensesStars);
+      document.getElementById('progress-senses').innerHTML = renderStars(sensesStars);
 
       // Play sound on card click
       document.querySelectorAll('.game-card').forEach(card => {
