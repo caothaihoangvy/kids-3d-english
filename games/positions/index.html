@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Positions Game - Kids 3D English</title>
+  <link rel="stylesheet" href="../../shared/ui.css">
+  <style>
+    /* Game-specific styles */
+    .header-game {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 20px;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .header-title {
+      font-size: 1.5rem;
+      color: #FF5722;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Round type indicator */
+    .round-type {
+      text-align: center;
+      font-size: 1rem;
+      color: #9C27B0;
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+
+    /* ========================
+       SECTION A: Reading Story
+       ======================== */
+    .story-box {
+      background: linear-gradient(145deg, #fff8e1, #ffecb3);
+      border: 4px solid #FFC107;
+      border-radius: 20px;
+      padding: 20px;
+      margin: 15px 0;
+      font-size: 1.3rem;
+      line-height: 1.8;
+      text-align: left;
+    }
+
+    .story-box .ordinal {
+      color: #E91E63;
+      font-weight: bold;
+    }
+
+    .question-text {
+      font-size: 1.4rem;
+      text-align: center;
+      color: #4CAF50;
+      margin: 15px 0;
+      padding: 10px;
+      background: rgba(76, 175, 80, 0.1);
+      border-radius: 15px;
+    }
+
+    /* Multiple choice buttons */
+    .mc-choices {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin: 20px 0;
+    }
+
+    .mc-btn {
+      padding: 18px 30px;
+      font-size: 1.4rem;
+      font-family: inherit;
+      border: 4px solid #2196F3;
+      border-radius: 15px;
+      background: white;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .mc-btn:hover {
+      transform: translateX(10px);
+      background: #E3F2FD;
+    }
+
+    .mc-btn .option-letter {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #2196F3;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+    }
+
+    .mc-btn.correct {
+      background: #C8E6C9;
+      border-color: #4CAF50;
+    }
+
+    .mc-btn.incorrect {
+      background: #FFCDD2;
+      border-color: #F44336;
+    }
+
+    /* ========================
+       SECTION B: Unscramble
+       ======================== */
+    .unscramble-area {
+      margin: 20px 0;
+    }
+
+    .sentence-line {
+      min-height: 60px;
+      background: #E8F5E9;
+      border: 3px dashed #4CAF50;
+      border-radius: 15px;
+      padding: 15px;
+      margin-bottom: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .sentence-line.empty::before {
+      content: 'Tap words below to build your sentence...';
+      color: #999;
+      font-style: italic;
+    }
+
+    .word-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin: 20px 0;
+    }
+
+    .word-chip {
+      padding: 12px 20px;
+      font-size: 1.3rem;
+      font-family: inherit;
+      border: 3px solid #9C27B0;
+      border-radius: 25px;
+      background: white;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .word-chip:hover {
+      background: #F3E5F5;
+      transform: scale(1.05);
+    }
+
+    .word-chip.used {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .word-chip.in-sentence {
+      background: #E1BEE7;
+      border-color: #7B1FA2;
+    }
+
+    .unscramble-controls {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .ctrl-btn {
+      padding: 12px 25px;
+      font-size: 1.1rem;
+      font-family: inherit;
+      border: 3px solid;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .ctrl-btn.undo {
+      border-color: #FF9800;
+      background: #FFF3E0;
+    }
+
+    .ctrl-btn.clear {
+      border-color: #F44336;
+      background: #FFEBEE;
+    }
+
+    .ctrl-btn.check {
+      border-color: #4CAF50;
+      background: #E8F5E9;
+    }
+
+    .ctrl-btn:hover {
+      transform: translateY(-3px);
+    }
+
+    /* ========================
+       SECTION C: Left/Right Row
+       ======================== */
+    .row-container {
+      perspective: 800px;
+      margin: 20px 0;
+    }
+
+    .items-row {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      padding: 20px;
+      background: linear-gradient(145deg, #E3F2FD, #BBDEFB);
+      border-radius: 20px;
+      transform-style: preserve-3d;
+      transition: transform 0.1s ease-out;
+      cursor: grab;
+    }
+
+    .items-row:active {
+      cursor: grabbing;
+    }
+
+    .items-row.idle {
+      animation: gentleRowFloat 4s ease-in-out infinite;
+    }
+
+    @keyframes gentleRowFloat {
+      0%, 100% { transform: rotateX(5deg) rotateY(-3deg); }
+      50% { transform: rotateX(-5deg) rotateY(3deg); }
+    }
+
+    .row-item {
+      width: 70px;
+      height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: white;
+      border: 3px solid #90CAF9;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      position: relative;
+      font-size: 2.5rem;
+    }
+
+    .row-item:hover {
+      transform: scale(1.1);
+      border-color: #1976D2;
+    }
+
+    .row-item.selected {
+      border-width: 4px;
+    }
+
+    /* Marking overlays */
+    .row-item .mark-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+    }
+
+    .mark-square {
+      width: 90%;
+      height: 90%;
+      border: 5px solid #4CAF50;
+      border-radius: 5px;
+    }
+
+    .mark-circle {
+      width: 85%;
+      height: 85%;
+      border: 5px solid #2196F3;
+      border-radius: 50%;
+    }
+
+    .mark-x {
+      font-size: 3rem;
+      color: #F44336;
+      font-weight: bold;
+    }
+
+    .mark-correct {
+      animation: markPop 0.3s ease;
+    }
+
+    .mark-incorrect {
+      border-color: #F44336 !important;
+      color: #F44336 !important;
+    }
+
+    @keyframes markPop {
+      0% { transform: scale(0); }
+      50% { transform: scale(1.2); }
+      100% { transform: scale(1); }
+    }
+
+    /* Direction indicator */
+    .direction-hint {
+      text-align: center;
+      font-size: 1.2rem;
+      color: #666;
+      margin: 10px 0;
+    }
+
+    .direction-hint .arrow {
+      font-size: 1.5rem;
+    }
+
+    /* Position labels */
+    .position-labels {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .pos-label {
+      width: 70px;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #666;
+    }
+
+    /* Hint button */
+    .hint-btn {
+      padding: 8px 20px;
+      font-size: 1rem;
+      font-family: inherit;
+      border: 3px solid #FF9800;
+      border-radius: 20px;
+      background: #FFF8E1;
+      cursor: pointer;
+      margin: 10px auto;
+      display: block;
+    }
+
+    .hint-btn:hover {
+      background: #FFECB3;
+    }
+
+    /* Counting animation */
+    .row-item.counting {
+      animation: countPulse 0.3s ease;
+    }
+
+    @keyframes countPulse {
+      0%, 100% { transform: scale(1); background: white; }
+      50% { transform: scale(1.15); background: #FFEB3B; }
+    }
+
+    /* ========================
+       Game Complete
+       ======================== */
+    .game-complete {
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    .game-complete h2 {
+      font-size: 2.5rem;
+      color: #4CAF50;
+      margin-bottom: 20px;
+    }
+
+    .final-stars {
+      font-size: 4rem;
+      margin: 20px 0;
+    }
+
+    .game-complete p {
+      font-size: 1.3rem;
+      margin: 10px 0;
+    }
+
+    .points-display {
+      font-size: 1.5rem;
+      color: #FF9800;
+      margin: 15px 0;
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      .row-item {
+        width: 50px;
+        height: 50px;
+        font-size: 1.8rem;
+      }
+
+      .pos-label {
+        width: 50px;
+        font-size: 0.7rem;
+      }
+
+      .story-box {
+        font-size: 1.1rem;
+      }
+
+      .mc-btn {
+        font-size: 1.2rem;
+        padding: 14px 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header -->
+    <header class="header-game">
+      <div class="header-left">
+        <a href="../../index.html" class="home-btn" title="Go Home">&#127968;</a>
+        <span class="header-title">&#128205; Positions</span>
+      </div>
+      <div class="header-right">
+        <button id="sound-toggle" class="toggle-btn active" title="Sound On/Off">
+          &#128266;
+        </button>
+        <button id="voice-toggle" class="toggle-btn active" title="Voice On/Off">
+          &#128483;
+        </button>
+      </div>
+    </header>
+
+    <!-- Game Area -->
+    <div class="game-area" id="game-area">
+      <!-- Score Display -->
+      <div class="score-display">
+        <h3>Stars: <span id="current-stars">&#9733;&#9733;&#9733;</span></h3>
+      </div>
+
+      <!-- Round Indicator -->
+      <div class="round-indicator">
+        Round <span id="current-round">1</span> of <span id="total-rounds">8</span>
+      </div>
+
+      <!-- Round Type -->
+      <div class="round-type" id="round-type">Reading Story</div>
+
+      <!-- Dynamic content area - filled by JS -->
+      <div id="round-content"></div>
+
+      <!-- Feedback Area -->
+      <div class="feedback hidden" id="feedback"></div>
+    </div>
+
+    <!-- Game Complete Screen -->
+    <div class="game-area game-complete hidden" id="game-complete">
+      <h2>&#127881; Well Done! &#127881;</h2>
+      <div class="final-stars" id="final-stars"></div>
+      <p id="final-message">You know your positions!</p>
+      <div class="points-display">
+        Points: <span id="final-points">0</span> / 8
+      </div>
+      <button class="play-btn" id="play-again-btn">Play Again!</button>
+    </div>
+  </div>
+
+  <script src="../../shared/ui.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>

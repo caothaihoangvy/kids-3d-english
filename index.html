@@ -102,6 +102,16 @@
           Best: <span id="stars-senses">&#9733;&#9733;&#9733;</span>
         </div>
       </a>
+
+      <!-- Positions Game -->
+      <a href="games/positions/index.html" class="game-card" id="card-positions">
+        <div class="game-card-icon">&#128205;</div>
+        <h2>Positions</h2>
+        <p>First, second, third... left or right?</p>
+        <div class="best-stars">
+          Best: <span id="stars-positions">&#9733;&#9733;&#9733;</span>
+        </div>
+      </a>
     </div>
 
     <!-- Progress Section -->
@@ -119,6 +129,10 @@
         <div class="progress-item">
           <span>&#128064; Five Senses</span>
           <span id="progress-senses" class="stars"></span>
+        </div>
+        <div class="progress-item">
+          <span>&#128205; Positions</span>
+          <span id="progress-positions" class="stars"></span>
         </div>
       </div>
     </section>
@@ -144,6 +158,11 @@
       const sensesStars = Settings.getBestStars('senses');
       document.getElementById('stars-senses').innerHTML = renderStars(sensesStars);
       document.getElementById('progress-senses').innerHTML = renderStars(sensesStars);
+
+      // Positions game stars
+      const positionsStars = Settings.getBestStars('positions');
+      document.getElementById('stars-positions').innerHTML = renderStars(positionsStars);
+      document.getElementById('progress-positions').innerHTML = renderStars(positionsStars);
 
       // Play sound on card click
       document.querySelectorAll('.game-card').forEach(card => {

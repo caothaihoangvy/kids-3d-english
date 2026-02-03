@@ -34,9 +34,24 @@ Learn about what things are made of:
 
 ### 2. Food Tastes Game
 Learn how different foods taste:
-- Sweet, Salty, Sour, Bitter, Spicy
+- Sweet, Sour, Spicy, Salty, Bitter, Yummy, Yucky
+- 7 rounds per session
+- Foods: lemon, chili, chocolate cake, coffee, rotten eggs, apple, burger, and more
+
+### 3. Five Senses Game
+Learn about the five senses:
+- Sight (eyes), Hearing (ears), Smell (nose), Taste (tongue), Touch (hands)
 - 5 rounds per session
-- Foods: candy, chips, lemon, dark chocolate, chili, and more
+- Items: rainbow, music, flower, candy, ice cube, and more
+
+### 4. Positions Game
+Learn ordinal numbers and left/right directions:
+- 8 rounds with 3 different mini-game types:
+  - **Reading + Multiple Choice** (3 rounds): Read a short story with ordinal words, answer questions
+  - **Unscramble Sentence** (3 rounds): Arrange word chips to form correct sentences
+  - **Left/Right Selection** (2 rounds): Tap the nth item from left or right in a row
+- Teaches: first, second, third... up to tenth
+- Scoring: 1 point for correct on first try, 0.5 for retry, 0 otherwise
 
 ## Project Structure
 
@@ -52,9 +67,15 @@ kids-3d-english/
     ├── materials/
     │   ├── index.html      # Materials game page
     │   └── game.js         # Materials game logic
-    └── tastes/
-        ├── index.html      # Tastes game page
-        └── game.js         # Tastes game logic
+    ├── tastes/
+    │   ├── index.html      # Tastes game page
+    │   └── game.js         # Tastes game logic
+    ├── senses/
+    │   ├── index.html      # Five Senses game page
+    │   └── game.js         # Five Senses game logic
+    └── positions/
+        ├── index.html      # Positions game page
+        └── game.js         # Positions game logic (3 round types)
 ```
 
 ## How to Add a New Game
@@ -141,6 +162,69 @@ kids-3d-english/
 ```javascript
 const yourGameStars = Settings.getBestStars('your-game-name');
 document.getElementById('stars-your-game').innerHTML = renderStars(yourGameStars);
+```
+
+## Editing the Positions Game
+
+### Adding/Editing Reading Stories
+
+In `games/positions/game.js`, find the `READING_ROUNDS` array:
+
+```javascript
+const READING_ROUNDS = [
+  {
+    story: `Your story with <span class="ordinal">first</span> and other ordinal words...`,
+    question: 'Your question here?',
+    options: ['Option A', 'Option B', 'Option C'],
+    answer: 'Option A'  // Must match one of the options exactly
+  },
+  // Add more stories...
+];
+```
+
+### Adding/Editing Unscramble Sentences
+
+Find the `UNSCRAMBLE_ROUNDS` array:
+
+```javascript
+const UNSCRAMBLE_ROUNDS = [
+  {
+    scrambled: ['word1', 'word2', 'word3'],  // Words will be shuffled
+    correct: 'word1 word2 word3.'             // The correct sentence
+  },
+  // Add more sentences...
+];
+```
+
+### Adding/Editing Left/Right Rounds
+
+Find the `LEFTRIGHT_ROUNDS` array:
+
+```javascript
+const LEFTRIGHT_ROUNDS = [
+  {
+    items: ['teddy', 'fan', 'tree', 'fan', 'star'],  // Item types from ROW_ICONS
+    direction: 'left',      // 'left' = count left-to-right, 'right' = count right-to-left
+    targetType: 'fan',      // Which item type to find
+    targetPosition: 2,      // Find the 2nd one (1-indexed)
+    markStyle: 'square',    // 'square', 'circle', or 'x'
+    instruction: 'From left to right, tap the 2nd fan.'
+  },
+  // Add more rounds...
+];
+```
+
+### Adding New Icon Types
+
+Add to the `ROW_ICONS` object:
+
+```javascript
+const ROW_ICONS = {
+  teddy: '&#129528;',   // Teddy bear emoji
+  fan: '&#127744;',     // Use HTML entity codes
+  // Add your icon:
+  car: '&#128663;',     // Car emoji
+};
 ```
 
 ## Shared Utilities (window.GameUtils)
