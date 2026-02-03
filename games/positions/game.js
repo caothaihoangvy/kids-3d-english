@@ -2,10 +2,10 @@
    Positions Game - Kids 3D English
    Learn: Ordinal numbers (1st-10th) + Left/Right
 
-   Round Types:
-   A) Reading + Multiple Choice (3 rounds)
-   B) Unscramble sentence (3 rounds)
-   C) Left/Right ordinal selection (2 rounds)
+   Round Types (10 rounds total):
+   A) Reading + Multiple Choice (4 rounds) - with 2-step reasoning
+   B) Unscramble sentence (3 rounds) - longer sentences with hint timer
+   C) Left/Right ordinal selection (3 rounds) - 8-10 icons
    ============================================ */
 
 (function() {
@@ -33,74 +33,102 @@
   };
 
   // ========================
-  // SECTION A: Reading Stories
+  // SECTION A: Reading Stories (Harder - 2 sequences)
   // ========================
   const READING_ROUNDS = [
     {
-      story: `Tommy has a birthday party. The <span class="ordinal">first</span> friend to arrive is Anna. The <span class="ordinal">second</span> friend is Ben. Clara comes in <span class="ordinal">third</span>.`,
-      question: 'Who is the first friend to arrive?',
+      story: `Tommy has a birthday party. The <span class="ordinal">first</span> friend to arrive is Anna. Ben arrives <span class="ordinal">second</span>. Clara arrives <span class="ordinal">third</span>. Mom asks them to sit down. Clara sits <span class="ordinal">first</span>. Anna sits <span class="ordinal">second</span>. Ben sits <span class="ordinal">third</span>.`,
+      question: 'Who sits in the second seat?',
       options: ['Anna', 'Ben', 'Clara'],
       answer: 'Anna'
     },
     {
-      story: `There is a race at school. Emma finishes <span class="ordinal">first</span>. Jake comes <span class="ordinal">second</span>. Lily is <span class="ordinal">third</span>, and Max is <span class="ordinal">fourth</span>.`,
-      question: 'Who finishes second in the race?',
+      story: `Tommy has a birthday party. The <span class="ordinal">first</span> friend to arrive is Anna. Ben arrives <span class="ordinal">second</span>. Clara arrives <span class="ordinal">third</span>. Mom asks them to sit down. Clara sits <span class="ordinal">first</span>. Anna sits <span class="ordinal">second</span>. Ben sits <span class="ordinal">third</span>.`,
+      question: 'Who is the third to arrive?',
+      options: ['Anna', 'Ben', 'Clara'],
+      answer: 'Clara'
+    },
+    {
+      story: `There is a race at school. Emma finishes <span class="ordinal">first</span>. Jake comes <span class="ordinal">second</span>. Lily is <span class="ordinal">third</span>. Max is <span class="ordinal">fourth</span>. Then they get prizes. Max gets his prize <span class="ordinal">first</span>. Emma gets hers <span class="ordinal">second</span>.`,
+      question: 'Who finishes the race before Lily?',
+      options: ['Emma and Jake', 'Max', 'Only Emma'],
+      answer: 'Emma and Jake'
+    },
+    {
+      story: `There is a race at school. Emma finishes <span class="ordinal">first</span>. Jake comes <span class="ordinal">second</span>. Lily is <span class="ordinal">third</span>. Max is <span class="ordinal">fourth</span>. Then they get prizes. Max gets his prize <span class="ordinal">first</span>. Emma gets hers <span class="ordinal">second</span>.`,
+      question: 'Who gets their prize first?',
       options: ['Emma', 'Jake', 'Max'],
-      answer: 'Jake'
+      answer: 'Max'
     },
     {
-      story: `Mom bakes cookies. She puts the <span class="ordinal">first</span> batch on a blue plate. The <span class="ordinal">second</span> batch goes on a red plate. The <span class="ordinal">third</span> batch is for Dad.`,
-      question: 'Which batch goes on a red plate?',
-      options: ['First', 'Second', 'Third'],
-      answer: 'Second'
+      story: `Five kids join the spelling bee. Mia goes <span class="ordinal">first</span>. Sam goes <span class="ordinal">second</span>. Olivia goes <span class="ordinal">third</span>. Liam goes <span class="ordinal">fourth</span>. Noah goes <span class="ordinal">fifth</span>. After the bee, Olivia wins <span class="ordinal">first</span> place!`,
+      question: 'How many kids went before Liam?',
+      options: ['Two', 'Three', 'Four'],
+      answer: 'Three'
     },
     {
-      story: `Five ducks swim in the pond. The <span class="ordinal">first</span> duck is white. The <span class="ordinal">second</span> and <span class="ordinal">third</span> ducks are brown. The <span class="ordinal">fourth</span> duck is yellow.`,
-      question: 'What color is the fourth duck?',
-      options: ['White', 'Brown', 'Yellow'],
+      story: `Five kids join the spelling bee. Mia goes <span class="ordinal">first</span>. Sam goes <span class="ordinal">second</span>. Olivia goes <span class="ordinal">third</span>. Liam goes <span class="ordinal">fourth</span>. Noah goes <span class="ordinal">fifth</span>. After the bee, Olivia wins <span class="ordinal">first</span> place!`,
+      question: 'Who goes right before Noah?',
+      options: ['Sam', 'Olivia', 'Liam'],
+      answer: 'Liam'
+    },
+    {
+      story: `Mom bakes four batches of cookies. The <span class="ordinal">first</span> batch is chocolate. The <span class="ordinal">second</span> batch is vanilla. The <span class="ordinal">third</span> batch is strawberry. The <span class="ordinal">fourth</span> batch is lemon. Dad eats the strawberry cookies <span class="ordinal">first</span>.`,
+      question: 'Which batch does Dad eat first?',
+      options: ['First batch', 'Second batch', 'Third batch'],
+      answer: 'Third batch'
+    },
+    {
+      story: `Six ducks swim in the pond. The <span class="ordinal">first</span> duck is white. The <span class="ordinal">second</span> duck is brown. The <span class="ordinal">third</span> duck is yellow. The <span class="ordinal">fourth</span> duck is gray. The <span class="ordinal">fifth</span> duck is black. The <span class="ordinal">sixth</span> duck is orange.`,
+      question: 'What color is the duck between the brown and gray ducks?',
+      options: ['White', 'Yellow', 'Black'],
       answer: 'Yellow'
-    },
-    {
-      story: `The bus makes many stops. At the <span class="ordinal">first</span> stop, Mia gets on. At the <span class="ordinal">third</span> stop, Sam gets on. At the <span class="ordinal">fifth</span> stop, they both get off.`,
-      question: 'At which stop does Sam get on?',
-      options: ['First', 'Third', 'Fifth'],
-      answer: 'Third'
     }
   ];
 
   // ========================
-  // SECTION B: Unscramble Sentences
+  // SECTION B: Unscramble Sentences (Harder - longer)
   // ========================
   const UNSCRAMBLE_ROUNDS = [
     {
-      scrambled: ['is', 'Ben', 'the', 'playing', 'saxophone'],
-      correct: 'Ben is playing the saxophone.'
+      scrambled: ['is', 'Ben', 'the', 'playing', 'saxophone', 'in', 'the', 'park'],
+      correct: 'Ben is playing the saxophone in the park.',
+      firstWord: 'Ben'
     },
     {
-      scrambled: ['the', 'like', 'I', 'of', 'smell', 'mangoes'],
-      correct: 'I like the smell of mangoes.'
+      scrambled: ['really', 'like', 'I', 'the', 'of', 'smell', 'mangoes', 'and', 'strawberries'],
+      correct: 'I really like the smell of mangoes and strawberries.',
+      firstWord: 'I'
     },
     {
-      scrambled: ['like', 'you', 'Do', 'the', 'of', 'smell', 'fish', '?'],
-      correct: 'Do you like the smell of fish?'
+      scrambled: ['like', 'you', 'Do', 'the', 'taste', 'of', 'salty', 'chips', '?'],
+      correct: 'Do you like the taste of salty chips?',
+      firstWord: 'Do'
     },
     {
-      scrambled: ['tastes', 'The', 'very', 'cake', 'sweet'],
-      correct: 'The cake tastes very sweet.'
+      scrambled: ['cake', 'The', 'chocolate', 'tastes', 'very', 'sweet', 'and', 'yummy'],
+      correct: 'The chocolate cake tastes very sweet and yummy.',
+      firstWord: 'The'
     },
     {
-      scrambled: ['flowers', 'smell', 'The', 'so', 'nice'],
-      correct: 'The flowers smell so nice.'
+      scrambled: ['beautiful', 'flowers', 'The', 'smell', 'so', 'nice', 'today'],
+      correct: 'The beautiful flowers smell so nice today.',
+      firstWord: 'The'
     },
     {
-      scrambled: ['is', 'This', 'my', 'food', 'favorite'],
-      correct: 'This is my favorite food.'
+      scrambled: ['is', 'pizza', 'This', 'my', 'favorite', 'food', 'in', 'the', 'world'],
+      correct: 'This is my favorite pizza food in the world.',
+      firstWord: 'This'
+    },
+    {
+      scrambled: ['Can', 'smell', 'you', 'the', 'fresh', 'bread', 'from', 'here', '?'],
+      correct: 'Can you smell the fresh bread from here?',
+      firstWord: 'Can'
     }
   ];
 
   // ========================
-  // SECTION C: Left/Right Selection
-  // Icons using emoji/symbols
+  // SECTION C: Left/Right Selection (Harder - 8-10 icons)
   // ========================
   const ROW_ICONS = {
     teddy: '&#129528;',   // Teddy bear
@@ -110,61 +138,103 @@
     heart: '&#10084;',    // Heart
     flower: '&#127804;',  // Flower
     apple: '&#127822;',   // Apple
-    ball: '&#9917;'       // Soccer ball
+    ball: '&#9917;',      // Soccer ball
+    car: '&#128663;',     // Car
+    fish: '&#128031;'     // Fish
   };
 
   const LEFTRIGHT_ROUNDS = [
     {
-      items: ['teddy', 'fan', 'tree', 'fan', 'star', 'teddy', 'fan', 'tree'],
-      direction: 'left',    // Count from left to right
+      items: ['teddy', 'fan', 'tree', 'fan', 'star', 'teddy', 'fan', 'tree', 'star', 'fan'],
+      direction: 'left',
       targetType: 'fan',
-      targetPosition: 1,    // 1st fan from left
+      targetPosition: 2,
       markStyle: 'square',
-      instruction: 'From left to right, tap the 1st fan.'
+      instruction: 'From left to right, tap the 2nd fan.'
     },
     {
-      items: ['star', 'flower', 'apple', 'flower', 'ball', 'flower', 'star'],
-      direction: 'right',   // Count from right to left
+      items: ['star', 'flower', 'apple', 'flower', 'ball', 'flower', 'star', 'flower', 'apple'],
+      direction: 'right',
       targetType: 'flower',
-      targetPosition: 2,    // 2nd flower from right
+      targetPosition: 3,
       markStyle: 'circle',
-      instruction: 'From right to left, tap the 2nd flower.'
+      instruction: 'From right to left, tap the 3rd flower.'
     },
     {
-      items: ['tree', 'heart', 'tree', 'apple', 'tree', 'ball', 'tree', 'star'],
+      items: ['tree', 'heart', 'tree', 'apple', 'tree', 'ball', 'tree', 'star', 'tree', 'fish'],
       direction: 'right',
       targetType: 'tree',
-      targetPosition: 3,    // 3rd tree from right
+      targetPosition: 4,
       markStyle: 'x',
-      instruction: 'From right to left, tap the 3rd tree.'
+      instruction: 'Tap the 4th tree from the right.'
     },
     {
-      items: ['ball', 'teddy', 'ball', 'teddy', 'ball', 'teddy'],
+      items: ['ball', 'teddy', 'car', 'teddy', 'ball', 'teddy', 'car', 'teddy'],
       direction: 'left',
       targetType: 'teddy',
-      targetPosition: 2,
+      targetPosition: 3,
       markStyle: 'circle',
-      instruction: 'From left to right, tap the 2nd teddy bear.'
+      instruction: 'Tap the 3rd teddy bear from the left.'
+    },
+    {
+      items: ['car', 'fish', 'car', 'star', 'fish', 'car', 'fish', 'star', 'car'],
+      direction: 'left',
+      targetType: 'car',
+      targetPosition: 4,
+      markStyle: 'square',
+      instruction: 'From left to right, tap the 4th car.'
+    },
+    {
+      items: ['heart', 'apple', 'heart', 'flower', 'apple', 'heart', 'apple', 'flower', 'heart'],
+      direction: 'right',
+      targetType: 'heart',
+      targetPosition: 2,
+      markStyle: 'x',
+      instruction: 'Tap the 2nd heart from the right.'
+    },
+    {
+      items: ['fish', 'star', 'ball', 'fish', 'star', 'fish', 'ball', 'star', 'fish', 'ball'],
+      direction: 'left',
+      targetType: 'fish',
+      targetPosition: 3,
+      markStyle: 'circle',
+      instruction: 'From left to right, tap the 3rd fish.'
+    },
+    {
+      items: ['apple', 'tree', 'flower', 'apple', 'tree', 'apple', 'flower', 'tree', 'apple'],
+      direction: 'right',
+      targetType: 'apple',
+      targetPosition: 3,
+      markStyle: 'square',
+      instruction: 'Tap the 3rd apple from the right.'
     }
   ];
+
+  // ============================================
+  // Game Constants
+  // ============================================
+
+  const TOTAL_ROUNDS = 10;
+  const READING_COUNT = 4;
+  const UNSCRAMBLE_COUNT = 3;
+  const LEFTRIGHT_COUNT = 3;
+  const HINT_TIMER_SECONDS = 12;
 
   // ============================================
   // Game State
   // ============================================
 
-  const TOTAL_ROUNDS = 8;
-
   let gameState = {
     currentRound: 0,
     points: 0,
     hasRetried: false,
-    roundSequence: [],  // Array of {type, data}
+    roundSequence: [],
     isPlaying: false,
-    // For unscramble
     selectedWords: [],
-    // For left/right
     rowRotateX: 0,
-    rowRotateY: 0
+    rowRotateY: 0,
+    hintTimer: null,
+    hintShown: false
   };
 
   // ============================================
@@ -191,6 +261,11 @@
   // ============================================
 
   function startGame() {
+    // Clear any existing timers
+    if (gameState.hintTimer) {
+      clearTimeout(gameState.hintTimer);
+    }
+
     // Reset state
     gameState = {
       currentRound: 0,
@@ -200,7 +275,9 @@
       isPlaying: true,
       selectedWords: [],
       rowRotateX: 0,
-      rowRotateY: 0
+      rowRotateY: 0,
+      hintTimer: null,
+      hintShown: false
     };
 
     // Update UI
@@ -217,23 +294,22 @@
   }
 
   function buildRoundSequence() {
-    // 3 Reading, 3 Unscramble, 2 Left/Right
     const sequence = [];
 
-    // Pick 3 random reading rounds
-    const readingPicks = pickRandom(READING_ROUNDS, 3);
+    // Pick random reading rounds
+    const readingPicks = pickRandom(READING_ROUNDS, READING_COUNT);
     readingPicks.forEach(data => {
       sequence.push({ type: 'reading', data });
     });
 
-    // Pick 3 random unscramble rounds
-    const unscramblePicks = pickRandom(UNSCRAMBLE_ROUNDS, 3);
+    // Pick random unscramble rounds
+    const unscramblePicks = pickRandom(UNSCRAMBLE_ROUNDS, UNSCRAMBLE_COUNT);
     unscramblePicks.forEach(data => {
       sequence.push({ type: 'unscramble', data });
     });
 
-    // Pick 2 random left/right rounds
-    const leftrightPicks = pickRandom(LEFTRIGHT_ROUNDS, 2);
+    // Pick random left/right rounds
+    const leftrightPicks = pickRandom(LEFTRIGHT_ROUNDS, LEFTRIGHT_COUNT);
     leftrightPicks.forEach(data => {
       sequence.push({ type: 'leftright', data });
     });
@@ -243,6 +319,13 @@
   }
 
   function nextRound() {
+    // Clear hint timer
+    if (gameState.hintTimer) {
+      clearTimeout(gameState.hintTimer);
+      gameState.hintTimer = null;
+    }
+    gameState.hintShown = false;
+
     gameState.currentRound++;
     gameState.hasRetried = false;
 
@@ -330,7 +413,6 @@
     } else {
       btn.classList.add('incorrect');
       handleIncorrect('reading', correctAnswer, () => {
-        // Show correct answer
         document.querySelectorAll('.mc-btn').forEach(b => {
           if (b.dataset.answer === correctAnswer) {
             b.classList.add('correct');
@@ -348,6 +430,7 @@
   function renderUnscrambleRound(data) {
     elements.roundType.textContent = '🔀 Unscramble Sentence';
     gameState.selectedWords = [];
+    gameState.hintShown = false;
 
     const shuffledWords = shuffleArray([...data.scrambled]);
 
@@ -358,7 +441,7 @@
     `;
 
     shuffledWords.forEach((word, i) => {
-      html += `<button class="word-chip" data-word="${word}" data-index="${i}">${word}</button>`;
+      html += `<button class="word-chip" data-word="${word}" data-index="${i}" data-original="${word}">${word}</button>`;
     });
 
     html += `
@@ -375,6 +458,7 @@
 
     // Store data for checking
     elements.roundContent.dataset.correct = data.correct;
+    elements.roundContent.dataset.firstWord = data.firstWord;
 
     // Add click handlers for word chips
     document.querySelectorAll('.word-chip').forEach(chip => {
@@ -386,10 +470,27 @@
     document.getElementById('clear-btn').addEventListener('click', handleClear);
     document.getElementById('check-btn').addEventListener('click', () => handleUnscrambleCheck(data.correct));
 
+    // Start hint timer (12 seconds)
+    gameState.hintTimer = setTimeout(() => {
+      showUnscrambleHint(data.firstWord);
+    }, HINT_TIMER_SECONDS * 1000);
+
     // Speak instruction
     setTimeout(() => {
       Speech.speak('Put the words in the right order to make a sentence.');
     }, 500);
+  }
+
+  function showUnscrambleHint(firstWord) {
+    if (gameState.hintShown) return;
+    gameState.hintShown = true;
+
+    // Find and highlight the first word chip
+    document.querySelectorAll('.word-chip').forEach(chip => {
+      if (chip.dataset.original === firstWord && !chip.classList.contains('used')) {
+        chip.classList.add('hint-glow');
+      }
+    });
   }
 
   function handleWordChipClick(chip) {
@@ -397,6 +498,7 @@
 
     Audio.playClick();
     chip.classList.add('used');
+    chip.classList.remove('hint-glow');
 
     const word = chip.dataset.word;
     gameState.selectedWords.push({ word, chipIndex: chip.dataset.index });
@@ -423,7 +525,6 @@
     Audio.playClick();
     const last = gameState.selectedWords.pop();
 
-    // Re-enable the chip
     const chip = document.querySelector(`.word-chip[data-index="${last.chipIndex}"]`);
     if (chip) chip.classList.remove('used');
 
@@ -436,7 +537,6 @@
     Audio.playClick();
     gameState.selectedWords = [];
 
-    // Re-enable all chips
     document.querySelectorAll('.word-chip').forEach(chip => {
       chip.classList.remove('used');
     });
@@ -445,19 +545,30 @@
   }
 
   function handleUnscrambleCheck(correctSentence) {
-    Audio.init();
-    const userSentence = gameState.selectedWords.map(item => item.word).join(' ');
+    // Clear hint timer
+    if (gameState.hintTimer) {
+      clearTimeout(gameState.hintTimer);
+      gameState.hintTimer = null;
+    }
 
-    // Normalize for comparison (handle punctuation)
-    const normalize = str => str.replace(/\s+/g, ' ').trim();
-    const isCorrect = normalize(userSentence) === normalize(correctSentence.replace(/[.?!]$/, ''));
+    Audio.init();
+    let userSentence = gameState.selectedWords.map(item => item.word).join(' ');
+
+    // Auto-add punctuation if missing
+    const lastChar = correctSentence.slice(-1);
+    if ((lastChar === '.' || lastChar === '?') && !userSentence.endsWith(lastChar)) {
+      userSentence = userSentence + lastChar;
+    }
+
+    // Normalize for comparison
+    const normalize = str => str.replace(/\s+/g, ' ').trim().toLowerCase();
+    const isCorrect = normalize(userSentence) === normalize(correctSentence);
 
     if (isCorrect) {
       handleCorrect('unscramble');
       Speech.speak(`Perfect! ${correctSentence}`);
     } else {
       handleIncorrect('unscramble', correctSentence, () => {
-        // Show correct sentence
         document.getElementById('sentence-line').innerHTML =
           `<span style="color: #4CAF50; font-weight: bold;">${correctSentence}</span>`;
       });
@@ -488,6 +599,7 @@
         <div class="row-item" data-type="${itemType}" data-index="${i}">
           ${ROW_ICONS[itemType]}
           <div class="mark-overlay" id="mark-${i}"></div>
+          <div class="count-label" id="count-${i}"></div>
         </div>
       `;
     });
@@ -499,12 +611,6 @@
     `;
 
     elements.roundContent.innerHTML = html;
-
-    // Store round data
-    elements.roundContent.dataset.targetType = data.targetType;
-    elements.roundContent.dataset.targetPosition = data.targetPosition;
-    elements.roundContent.dataset.direction = data.direction;
-    elements.roundContent.dataset.markStyle = data.markStyle;
 
     // Setup row drag
     setupRowDrag();
@@ -587,20 +693,32 @@
       targetItems.reverse();
     }
 
-    // Animate counting
+    // Animate counting with numbers appearing above items
     targetItems.forEach((item, count) => {
       setTimeout(() => {
         item.element.classList.add('counting');
+        // Show count label
+        const countLabel = document.getElementById(`count-${item.index}`);
+        if (countLabel) {
+          countLabel.textContent = ORDINALS[count + 1].short;
+          countLabel.classList.add('show');
+        }
         Speech.speak(ORDINALS[count + 1].short);
-        setTimeout(() => item.element.classList.remove('counting'), 250);
-      }, count * 600);
+
+        setTimeout(() => {
+          item.element.classList.remove('counting');
+          // Hide count label after a delay
+          setTimeout(() => {
+            if (countLabel) countLabel.classList.remove('show');
+          }, 1500);
+        }, 400);
+      }, count * 700);
     });
   }
 
   function handleRowItemClick(item, data) {
     Audio.init();
 
-    // Find the correct item index
     const items = document.querySelectorAll('.row-item');
     const targetItems = [];
 
@@ -615,7 +733,6 @@
       targetItems.reverse();
     }
 
-    // Find the correct target (targetPosition is 1-indexed)
     const correctItem = targetItems[data.targetPosition - 1];
     const clickedIndex = parseInt(item.dataset.index);
     const isCorrect = correctItem && correctItem.index === clickedIndex;
@@ -643,7 +760,6 @@
       Speech.speak(`Great! That's the ${ORDINALS[data.targetPosition].word} ${data.targetType}!`);
     } else {
       handleIncorrect('leftright', null, () => {
-        // Show correct item
         if (correctItem) {
           const correctMarkEl = document.getElementById(`mark-${correctItem.index}`);
           let correctMark = '';
@@ -692,7 +808,6 @@
     Audio.playError();
 
     if (!gameState.hasRetried) {
-      // First wrong attempt - allow retry
       gameState.hasRetried = true;
 
       elements.feedback.innerHTML = '&#128528; Try again!';
@@ -701,7 +816,6 @@
 
       Speech.speak('Oops! Try again!');
 
-      // Re-enable for retry based on round type
       setTimeout(() => {
         if (roundType === 'reading') {
           document.querySelectorAll('.mc-btn:not(.incorrect)').forEach(b => b.disabled = false);
@@ -709,13 +823,10 @@
           document.querySelectorAll('.row-item').forEach(el => {
             el.style.pointerEvents = 'auto';
           });
-          // Clear wrong marks
           document.querySelectorAll('.mark-overlay').forEach(m => m.innerHTML = '');
         }
-        // Unscramble doesn't need re-enabling, user can keep trying
       }, 800);
     } else {
-      // Second wrong - show correct and move on
       elements.feedback.innerHTML = correctAnswer
         ? `The answer is: <strong>${correctAnswer}</strong>`
         : 'Let me show you the answer!';
@@ -739,14 +850,20 @@
     elements.currentStars.innerHTML = renderStars(stars);
   }
 
+  // Updated scoring for 10 rounds
   function calculateStars(points) {
-    if (points >= 7) return 3;
-    if (points >= 5) return 2;
-    if (points >= 3) return 1;
+    if (points >= 8) return 3;
+    if (points >= 6) return 2;
+    if (points >= 4) return 1;
     return 0;
   }
 
   function endGame() {
+    // Clear any timers
+    if (gameState.hintTimer) {
+      clearTimeout(gameState.hintTimer);
+    }
+
     gameState.isPlaying = false;
 
     const finalStars = calculateStars(gameState.points);
@@ -761,7 +878,6 @@
     elements.finalStars.innerHTML = renderStars(finalStars);
     elements.finalPoints.textContent = gameState.points.toFixed(1);
 
-    // Set message based on performance
     const messages = [
       'Keep practicing! You can do it!',
       'Good effort! Keep learning!',
@@ -786,7 +902,6 @@
     startGame();
   });
 
-  // Home button sound
   document.querySelector('.home-btn').addEventListener('click', () => {
     Audio.playClick();
   });

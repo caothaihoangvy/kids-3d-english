@@ -218,6 +218,23 @@
       transform: translateY(-3px);
     }
 
+    /* Hint glow for first word */
+    .word-chip.hint-glow {
+      animation: hintGlow 1s ease-in-out infinite;
+      border-color: #FF9800;
+    }
+
+    @keyframes hintGlow {
+      0%, 100% {
+        box-shadow: 0 0 5px #FF9800;
+        background: #FFF3E0;
+      }
+      50% {
+        box-shadow: 0 0 20px #FF9800, 0 0 30px #FFB74D;
+        background: #FFE0B2;
+      }
+    }
+
     /* ========================
        SECTION C: Left/Right Row
        ======================== */
@@ -229,13 +246,14 @@
     .items-row {
       display: flex;
       justify-content: center;
-      gap: 10px;
-      padding: 20px;
+      gap: 8px;
+      padding: 20px 10px;
       background: linear-gradient(145deg, #E3F2FD, #BBDEFB);
       border-radius: 20px;
       transform-style: preserve-3d;
       transition: transform 0.1s ease-out;
       cursor: grab;
+      flex-wrap: wrap;
     }
 
     .items-row:active {
@@ -252,8 +270,8 @@
     }
 
     .row-item {
-      width: 70px;
-      height: 70px;
+      width: 60px;
+      height: 60px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -263,7 +281,7 @@
       cursor: pointer;
       transition: all 0.2s ease;
       position: relative;
-      font-size: 2.5rem;
+      font-size: 2rem;
     }
 
     .row-item:hover {
@@ -273,6 +291,35 @@
 
     .row-item.selected {
       border-width: 4px;
+    }
+
+    /* Count labels for hint animation */
+    .count-label {
+      position: absolute;
+      top: -30px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #FF9800;
+      color: white;
+      padding: 4px 10px;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      font-weight: bold;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+
+    .count-label.show {
+      opacity: 1;
+      animation: labelPop 0.3s ease;
+    }
+
+    @keyframes labelPop {
+      0% { transform: translateX(-50%) scale(0); }
+      50% { transform: translateX(-50%) scale(1.2); }
+      100% { transform: translateX(-50%) scale(1); }
     }
 
     /* Marking overlays */
@@ -458,7 +505,7 @@
 
       <!-- Round Indicator -->
       <div class="round-indicator">
-        Round <span id="current-round">1</span> of <span id="total-rounds">8</span>
+        Round <span id="current-round">1</span> of <span id="total-rounds">10</span>
       </div>
 
       <!-- Round Type -->
