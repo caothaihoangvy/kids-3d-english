@@ -112,6 +112,16 @@
           Best: <span id="stars-positions">&#9733;&#9733;&#9733;</span>
         </div>
       </a>
+
+      <!-- Our Bodies Game -->
+      <a href="games/our-bodies/index.html" class="game-card" id="card-our-bodies">
+        <div class="game-card-icon">&#129489;</div>
+        <h2>Our Bodies</h2>
+        <p>Learn body parts: eyes, nose, hands, feet!</p>
+        <div class="best-stars">
+          Best: <span id="stars-our-bodies">&#9733;&#9733;&#9733;</span>
+        </div>
+      </a>
     </div>
 
     <!-- Progress Section -->
@@ -133,6 +143,10 @@
         <div class="progress-item">
           <span>&#128205; Positions</span>
           <span id="progress-positions" class="stars"></span>
+        </div>
+        <div class="progress-item">
+          <span>&#129489; Our Bodies</span>
+          <span id="progress-our-bodies" class="stars"></span>
         </div>
       </div>
     </section>
@@ -163,6 +177,11 @@
       const positionsStars = Settings.getBestStars('positions');
       document.getElementById('stars-positions').innerHTML = renderStars(positionsStars);
       document.getElementById('progress-positions').innerHTML = renderStars(positionsStars);
+
+      // Our Bodies game stars
+      const ourBodiesStars = Settings.getBestStars('our_bodies');
+      document.getElementById('stars-our-bodies').innerHTML = renderStars(ourBodiesStars);
+      document.getElementById('progress-our-bodies').innerHTML = renderStars(ourBodiesStars);
 
       // Play sound on card click
       document.querySelectorAll('.game-card').forEach(card => {

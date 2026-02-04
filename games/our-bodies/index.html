@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Our Bodies - Kids 3D English</title>
+  <link rel="stylesheet" href="../../shared/ui.css">
+  <style>
+    /* Game-specific styles */
+    .header-game {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 15px 20px;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: var(--border-radius);
+      margin-bottom: var(--spacing);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .header-title {
+      font-size: 1.6rem;
+      color: #E91E63;
+      font-weight: bold;
+    }
+
+    .header-right {
+      display: flex;
+      gap: 10px;
+    }
+
+    /* Body Card Container */
+    .body-card-container {
+      perspective: 1000px;
+      width: 280px;
+      height: 340px;
+      margin: 15px auto;
+    }
+
+    .body-card {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.1s ease-out;
+      cursor: grab;
+    }
+
+    .body-card:active {
+      cursor: grabbing;
+    }
+
+    .body-card-face {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: var(--border-radius);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(145deg, #fff5f8, #ffe0e9);
+      box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.3),
+        inset 0 2px 10px rgba(255, 255, 255, 0.8);
+      border: 5px solid #f8bbd9;
+      padding: 15px;
+    }
+
+    .body-card.idle {
+      animation: gentleFloat 4s ease-in-out infinite;
+    }
+
+    /* Body SVG Styling */
+    .body-svg {
+      width: 180px;
+      height: 280px;
+    }
+
+    .body-svg .body-part {
+      fill: none;
+      stroke: #555;
+      stroke-width: 2;
+      transition: all 0.3s ease;
+    }
+
+    .body-svg .body-part.highlight {
+      fill: #ffeb3b;
+      stroke: #ff9800;
+      stroke-width: 3;
+      filter: drop-shadow(0 0 8px rgba(255, 152, 0, 0.6));
+      animation: pulseHighlight 1s ease-in-out infinite;
+    }
+
+    @keyframes pulseHighlight {
+      0%, 100% { fill: #ffeb3b; }
+      50% { fill: #fff176; }
+    }
+
+    /* Scene for Hurt Body Part */
+    .scene-container {
+      background: linear-gradient(145deg, #e3f2fd, #bbdefb);
+      border-radius: var(--border-radius);
+      padding: 20px;
+      margin: 15px auto;
+      max-width: 450px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    }
+
+    .kids-row {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    .kid-figure {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .kid-label {
+      font-size: 1.3rem;
+      font-weight: bold;
+      color: #1976d2;
+      background: white;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .kid-svg {
+      width: 55px;
+      height: 70px;
+    }
+
+    .scene-caption {
+      font-size: 1.3rem;
+      text-align: center;
+      color: #333;
+      background: white;
+      padding: 12px 18px;
+      border-radius: 15px;
+      margin-top: 10px;
+    }
+
+    /* Bricks Table */
+    .bricks-container {
+      background: linear-gradient(145deg, #e8f5e9, #c8e6c9);
+      border-radius: var(--border-radius);
+      padding: 20px;
+      margin: 15px auto;
+      max-width: 500px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    }
+
+    .bricks-table {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .brick-column {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .child-name {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #2e7d32;
+    }
+
+    .foot-icon svg {
+      width: 40px;
+      height: 25px;
+    }
+
+    .brick-stack {
+      display: flex;
+      flex-direction: column-reverse;
+      gap: 2px;
+      min-height: 100px;
+      align-items: center;
+    }
+
+    .brick {
+      width: 35px;
+      height: 10px;
+      background: linear-gradient(145deg, #ff7043, #e64a19);
+      border-radius: 2px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    .brick-count {
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: #bf360c;
+      background: white;
+      padding: 5px 12px;
+      border-radius: 10px;
+      min-width: 40px;
+      text-align: center;
+    }
+
+    .brick-input {
+      display: flex;
+      gap: 5px;
+    }
+
+    .brick-choice {
+      padding: 8px 14px;
+      font-size: 1.1rem;
+      font-family: inherit;
+      border: 3px solid #4CAF50;
+      border-radius: 10px;
+      background: white;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .brick-choice:hover {
+      background: #4CAF50;
+      color: white;
+    }
+
+    .brick-choice.selected {
+      background: #4CAF50;
+      color: white;
+    }
+
+    .brick-choice.correct {
+      background: #4CAF50;
+      color: white;
+      animation: pulse 0.5s ease;
+    }
+
+    .brick-choice.incorrect {
+      background: #f44336;
+      border-color: #f44336;
+      color: white;
+    }
+
+    /* Choice buttons styling */
+    .choices {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      margin: 15px 0;
+    }
+
+    .choice-btn {
+      min-width: 130px;
+      padding: 18px 25px;
+      font-size: 1.4rem;
+      font-family: inherit;
+      border: 5px solid #E91E63;
+      border-radius: var(--border-radius);
+      background: var(--card-bg);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+      text-transform: capitalize;
+    }
+
+    .choice-btn:hover {
+      transform: translateY(-5px);
+      background: #E91E63;
+      color: white;
+    }
+
+    .choice-btn.correct {
+      background: var(--success-color);
+      border-color: var(--success-color);
+      color: white;
+      animation: bounce 0.5s ease;
+    }
+
+    .choice-btn.incorrect {
+      background: var(--error-color);
+      border-color: var(--error-color);
+      color: white;
+      animation: shake 0.5s ease;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0) scale(1); }
+      30% { transform: translateY(-15px) scale(1.1); }
+      60% { transform: translateY(-5px) scale(1.05); }
+    }
+
+    /* Question styling */
+    .question {
+      font-size: 1.6rem;
+      text-align: center;
+      color: #E91E63;
+      margin: 15px 0;
+      padding: 15px;
+      background: rgba(233, 30, 99, 0.1);
+      border-radius: var(--border-radius);
+    }
+
+    /* Word Bank Modal */
+    .word-bank-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      padding: 12px 20px;
+      font-size: 1.1rem;
+      font-family: inherit;
+      border: 4px solid #9c27b0;
+      border-radius: 25px;
+      background: white;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      z-index: 100;
+      transition: all 0.2s ease;
+    }
+
+    .word-bank-btn:hover {
+      background: #9c27b0;
+      color: white;
+      transform: scale(1.05);
+    }
+
+    .word-bank-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.6);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .word-bank-modal.show {
+      display: flex;
+    }
+
+    .word-bank-content {
+      background: white;
+      border-radius: var(--border-radius);
+      padding: 25px;
+      max-width: 400px;
+      max-height: 80vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+
+    .word-bank-content h2 {
+      color: #9c27b0;
+      text-align: center;
+      margin-bottom: 15px;
+    }
+
+    .word-bank-list {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .word-bank-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px;
+      background: #f3e5f5;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .word-bank-item:hover {
+      background: #e1bee7;
+      transform: scale(1.02);
+    }
+
+    .word-bank-close {
+      display: block;
+      margin: 15px auto 0;
+      padding: 10px 30px;
+      font-size: 1.1rem;
+      font-family: inherit;
+      border: 3px solid #9c27b0;
+      border-radius: 15px;
+      background: #9c27b0;
+      color: white;
+      cursor: pointer;
+    }
+
+    /* Comparison questions */
+    .compare-questions {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      margin: 15px 0;
+    }
+
+    .compare-question {
+      background: white;
+      padding: 15px;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    .compare-question p {
+      font-size: 1.3rem;
+      color: #2e7d32;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+    .compare-choices {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .compare-btn {
+      padding: 10px 18px;
+      font-size: 1.2rem;
+      font-family: inherit;
+      border: 3px solid #4CAF50;
+      border-radius: 12px;
+      background: white;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .compare-btn:hover {
+      background: #4CAF50;
+      color: white;
+    }
+
+    .compare-btn.selected {
+      background: #4CAF50;
+      color: white;
+    }
+
+    .compare-btn.correct {
+      background: #4CAF50;
+      color: white;
+      animation: pulse 0.5s ease;
+    }
+
+    .compare-btn.incorrect {
+      background: #f44336;
+      border-color: #f44336;
+      color: white;
+    }
+
+    .compare-btn:disabled {
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+
+    .submit-compare-btn {
+      display: block;
+      margin: 15px auto 0;
+      padding: 15px 40px;
+      font-size: 1.3rem;
+      font-family: inherit;
+      border: 4px solid #4CAF50;
+      border-radius: 15px;
+      background: #4CAF50;
+      color: white;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .submit-compare-btn:hover {
+      background: #388E3C;
+    }
+
+    .submit-compare-btn:disabled {
+      background: #ccc;
+      border-color: #ccc;
+      cursor: not-allowed;
+    }
+
+    /* Responsive */
+    @media (max-width: 500px) {
+      .body-card-container {
+        width: 220px;
+        height: 280px;
+      }
+
+      .body-svg {
+        width: 140px;
+        height: 220px;
+      }
+
+      .kid-svg {
+        width: 40px;
+        height: 55px;
+      }
+
+      .kids-row {
+        gap: 5px;
+      }
+
+      .choice-btn {
+        min-width: 100px;
+        padding: 12px 18px;
+        font-size: 1.2rem;
+      }
+
+      .bricks-table {
+        gap: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header -->
+    <header class="header-game">
+      <div class="header-left">
+        <a href="../../index.html" class="home-btn">&#127968;</a>
+        <span class="header-title">&#129489; Our Bodies</span>
+      </div>
+      <div class="header-right">
+        <button id="sound-toggle" class="toggle-btn active">&#128266;</button>
+        <button id="voice-toggle" class="toggle-btn active">&#128483;</button>
+      </div>
+    </header>
+
+    <!-- Game Area -->
+    <div class="game-area" id="game-area">
+      <div class="score-display">
+        <h3>Stars: <span id="current-stars">&#9733;&#9733;&#9733;</span></h3>
+      </div>
+
+      <div class="round-indicator">
+        Round <span id="current-round">1</span> of <span id="total-rounds">10</span>
+      </div>
+
+      <!-- Dynamic content area -->
+      <div id="round-content"></div>
+
+      <div class="question" id="question"></div>
+      <div class="choices" id="choices-container"></div>
+      <div class="feedback hidden" id="feedback"></div>
+    </div>
+
+    <!-- Game Complete Screen -->
+    <div class="game-area game-complete hidden" id="game-complete">
+      <h2>&#127881; Great Job! &#127881;</h2>
+      <div class="final-stars" id="final-stars"></div>
+      <p id="final-message">You did amazing!</p>
+      <p>You scored <span id="final-score">0</span> out of <span id="final-total">10</span> points!</p>
+      <button class="play-btn" id="play-again-btn">Play Again!</button>
+    </div>
+  </div>
+
+  <!-- Word Bank Button -->
+  <button class="word-bank-btn" id="word-bank-btn">&#128218; Word Bank</button>
+
+  <!-- Word Bank Modal -->
+  <div class="word-bank-modal" id="word-bank-modal">
+    <div class="word-bank-content">
+      <h2>&#129489; Body Parts</h2>
+      <div class="word-bank-list" id="word-bank-list"></div>
+      <button class="word-bank-close" id="word-bank-close">Close</button>
+    </div>
+  </div>
+
+  <script src="../../shared/ui.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>
