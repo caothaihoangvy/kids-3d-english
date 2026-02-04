@@ -54,12 +54,11 @@ Learn ordinal numbers and left/right directions:
 - Scoring: 1 point for correct on first try, 0.5 for retry, 0 otherwise
 
 ### 5. Our Bodies Game
-Learn body parts through interactive activities:
-- 10 rounds with 3 different mini-game types:
-  - **Label the Body** (4 rounds): Identify highlighted body parts on an SVG figure
-  - **Hurt Body Part** (4 rounds): Read a scenario with 5 kids and identify which body part is hurt
-  - **Feet Comparison with Bricks** (2 rounds): Math/comparison with brick measurements
-- Body parts covered: eye, nose, mouth, ear, shoulder, elbow, hand, finger, knee, foot, toe, tummy, chest, hip, hair
+Learn body parts vocabulary:
+- 10 rounds of vocabulary practice
+- Shows body SVG with highlighted part, identify which body part it is
+- Body parts: eye, nose, mouth, ear, shoulder, elbow, hand, finger, knee, foot, toe, tummy, chest, hair, head
+- 3 choices per round (1 correct + 2 wrong)
 - Scoring: 1 point for correct on first try, 0.5 for retry, 0 otherwise
 - Stars: 3 stars >= 8 points, 2 stars >= 6, 1 star >= 4
 
@@ -263,67 +262,14 @@ In `games/our-bodies/game.js`, find the `BODY_PARTS` array:
 
 ```javascript
 const BODY_PARTS = [
-  { name: 'eye', plural: 'eyes', icon: '👁️' },
-  { name: 'nose', plural: 'noses', icon: '👃' },
+  { name: 'eye', icon: '👁️' },
+  { name: 'nose', icon: '👃' },
   // Add more body parts:
-  { name: 'neck', plural: 'necks', icon: '🦒' },
+  { name: 'neck', icon: '🦒' },
 ];
 ```
 
-To add a new body part to the "Label the Body" rounds, also update `LABEL_BODY_PARTS`:
-
-```javascript
-const LABEL_BODY_PARTS = ['eye', 'nose', 'mouth', 'ear', 'shoulder', 'elbow', 'hand', 'knee', 'foot', 'tummy'];
-// Add your new part to this list
-```
-
-Note: You'll also need to add SVG path data for new parts in the `generateBodySVG()` function's `partPaths` object.
-
-### Adding/Editing Hurt Body Part Scenarios
-
-Find the `HURT_SCENARIOS` array:
-
-```javascript
-const HURT_SCENARIOS = [
-  {
-    caption: 'The boy next to girl A has hurt his ____.',
-    answer: 'knee',
-    options: ['foot', 'elbow', 'knee'],
-    kidsSetup: [
-      { label: 'A', gender: 'girl' },
-      { label: 'B', gender: 'boy', hurt: 'knee' },  // Add 'hurt' to mark the hurt child
-      { label: 'C', gender: 'girl' },
-      { label: 'D', gender: 'boy' },
-      { label: 'E', gender: 'girl' }
-    ]
-  },
-  // Add more scenarios...
-];
-```
-
-### Adding/Editing Feet Comparison (Bricks) Data
-
-Find the `FEET_DATA` object:
-
-```javascript
-const FEET_DATA = {
-  children: [
-    { name: 'Anna', bricks: 8, isExample: true },  // isExample shows the count
-    { name: 'Bill', bricks: 6 },
-    { name: 'Arun', bricks: 10 },
-    { name: 'Fen', bricks: 7 }
-  ],
-  brickOptions: {
-    Bill: [5, 6, 7],    // Multiple choice options for Bill (correct = 6)
-    Arun: [9, 10, 11],  // Multiple choice options for Arun (correct = 10)
-    Fen: [6, 7, 8]      // Multiple choice options for Fen (correct = 7)
-  }
-};
-```
-
-To add a new child:
-1. Add to the `children` array with their correct brick count
-2. Add their name to `brickOptions` with 3 multiple-choice numbers (include the correct answer)
+Note: You'll also need to add SVG path data for new parts in the `generateBodySVG()` function's `partPaths` object to show the highlighted area on the body diagram.
 
 ## Editing the Staying Alive Game
 
