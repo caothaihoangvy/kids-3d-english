@@ -122,6 +122,16 @@
           Best: <span id="stars-our-bodies">&#9733;&#9733;&#9733;</span>
         </div>
       </a>
+
+      <!-- Staying Alive Game -->
+      <a href="games/staying-alive/index.html" class="game-card" id="card-staying-alive">
+        <div class="game-card-icon">&#127793;</div>
+        <h2>Staying Alive</h2>
+        <p>Healthy food, water, air - what do we need?</p>
+        <div class="best-stars">
+          Best: <span id="stars-staying-alive">&#9733;&#9733;&#9733;</span>
+        </div>
+      </a>
     </div>
 
     <!-- Progress Section -->
@@ -147,6 +157,10 @@
         <div class="progress-item">
           <span>&#129489; Our Bodies</span>
           <span id="progress-our-bodies" class="stars"></span>
+        </div>
+        <div class="progress-item">
+          <span>&#127793; Staying Alive</span>
+          <span id="progress-staying-alive" class="stars"></span>
         </div>
       </div>
     </section>
@@ -182,6 +196,11 @@
       const ourBodiesStars = Settings.getBestStars('our_bodies');
       document.getElementById('stars-our-bodies').innerHTML = renderStars(ourBodiesStars);
       document.getElementById('progress-our-bodies').innerHTML = renderStars(ourBodiesStars);
+
+      // Staying Alive game stars
+      const stayingAliveStars = Settings.getBestStars('staying_alive');
+      document.getElementById('stars-staying-alive').innerHTML = renderStars(stayingAliveStars);
+      document.getElementById('progress-staying-alive').innerHTML = renderStars(stayingAliveStars);
 
       // Play sound on card click
       document.querySelectorAll('.game-card').forEach(card => {

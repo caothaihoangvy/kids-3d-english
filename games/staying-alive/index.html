@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Staying Alive - Kids 3D English</title>
+  <link rel="stylesheet" href="../../shared/ui.css">
+  <style>
+    /* Game-specific styles */
+    .header-game {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 15px 20px;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: var(--border-radius);
+      margin-bottom: var(--spacing);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .header-title {
+      font-size: 1.6rem;
+      color: #4CAF50;
+      font-weight: bold;
+    }
+
+    .header-right {
+      display: flex;
+      gap: 10px;
+    }
+
+    /* 3D Card Container */
+    .card-3d-container {
+      perspective: 1000px;
+      width: 300px;
+      height: auto;
+      min-height: 280px;
+      margin: 15px auto;
+    }
+
+    .card-3d {
+      width: 100%;
+      min-height: 280px;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.1s ease-out;
+      cursor: grab;
+    }
+
+    .card-3d:active {
+      cursor: grabbing;
+    }
+
+    .card-3d-face {
+      width: 100%;
+      min-height: 280px;
+      border-radius: var(--border-radius);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 25px;
+      background: linear-gradient(145deg, #e8f5e9, #c8e6c9);
+      box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.3),
+        inset 0 2px 10px rgba(255, 255, 255, 0.8);
+      border: 5px solid #a5d6a7;
+    }
+
+    .card-3d.idle {
+      animation: gentleFloat 4s ease-in-out infinite;
+    }
+
+    @keyframes gentleFloat {
+      0%, 100% { transform: rotateX(3deg) rotateY(-3deg); }
+      50% { transform: rotateX(-3deg) rotateY(3deg); }
+    }
+
+    @keyframes cardBounce {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    @keyframes cardShake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-8px); }
+      75% { transform: translateX(8px); }
+    }
+
+    .card-3d.bounce {
+      animation: cardBounce 0.4s ease;
+    }
+
+    .card-3d.shake {
+      animation: cardShake 0.4s ease;
+    }
+
+    /* Food/Item Display */
+    .item-display {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .item-icon {
+      width: 100px;
+      height: 100px;
+      margin: 0 auto 10px;
+    }
+
+    .item-icon svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .item-name {
+      font-size: 1.8rem;
+      color: #2e7d32;
+      font-weight: bold;
+      text-transform: capitalize;
+    }
+
+    /* Healthy Choice Buttons */
+    .health-choices {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      margin-top: 15px;
+    }
+
+    .health-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      padding: 15px 25px;
+      font-size: 1.3rem;
+      font-family: inherit;
+      border: 5px solid #888;
+      border-radius: 15px;
+      background: white;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      min-width: 120px;
+    }
+
+    .health-btn .checkbox {
+      width: 35px;
+      height: 35px;
+      border: 4px solid #888;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      background: white;
+    }
+
+    .health-btn.healthy {
+      border-color: #4CAF50;
+    }
+
+    .health-btn.healthy .checkbox {
+      border-color: #4CAF50;
+    }
+
+    .health-btn.unhealthy {
+      border-color: #f44336;
+    }
+
+    .health-btn.unhealthy .checkbox {
+      border-color: #f44336;
+    }
+
+    .health-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    }
+
+    .health-btn.selected .checkbox {
+      background: currentColor;
+      color: white;
+    }
+
+    .health-btn.healthy.selected {
+      background: #e8f5e9;
+    }
+
+    .health-btn.unhealthy.selected {
+      background: #ffebee;
+    }
+
+    .health-btn.correct {
+      border-color: #4CAF50 !important;
+      background: #c8e6c9 !important;
+    }
+
+    .health-btn.incorrect {
+      border-color: #f44336 !important;
+      background: #ffcdd2 !important;
+    }
+
+    .health-btn:disabled {
+      cursor: not-allowed;
+      opacity: 0.8;
+    }
+
+    /* Explanation text */
+    .explanation {
+      font-size: 1.2rem;
+      text-align: center;
+      padding: 12px 20px;
+      border-radius: 15px;
+      margin-top: 15px;
+      max-width: 280px;
+    }
+
+    .explanation.success {
+      background: #c8e6c9;
+      color: #2e7d32;
+    }
+
+    .explanation.error {
+      background: #ffcdd2;
+      color: #c62828;
+    }
+
+    /* Sentence Fill Section */
+    .sentences-container {
+      width: 100%;
+    }
+
+    .sentence-row {
+      background: white;
+      padding: 15px;
+      border-radius: 12px;
+      margin-bottom: 15px;
+      font-size: 1.3rem;
+      color: #333;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      justify-content: center;
+    }
+
+    .blank-slot {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 90px;
+      height: 40px;
+      border: 3px dashed #4CAF50;
+      border-radius: 10px;
+      background: #f1f8e9;
+      font-weight: bold;
+      color: #2e7d32;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .blank-slot.filled {
+      border-style: solid;
+      background: #c8e6c9;
+    }
+
+    .blank-slot.correct {
+      border-color: #4CAF50;
+      background: #a5d6a7;
+    }
+
+    .blank-slot.incorrect {
+      border-color: #f44336;
+      background: #ffcdd2;
+      color: #c62828;
+    }
+
+    /* Word Bank */
+    .word-bank {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin: 15px 0;
+      padding: 15px;
+      background: rgba(255,255,255,0.8);
+      border-radius: 15px;
+    }
+
+    .word-tile {
+      padding: 10px 18px;
+      font-size: 1.2rem;
+      font-family: inherit;
+      border: 4px solid #2196F3;
+      border-radius: 12px;
+      background: white;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-transform: lowercase;
+    }
+
+    .word-tile:hover {
+      background: #e3f2fd;
+      transform: translateY(-2px);
+    }
+
+    .word-tile.selected {
+      background: #2196F3;
+      color: white;
+    }
+
+    .word-tile.used {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .word-tile:disabled {
+      cursor: not-allowed;
+    }
+
+    /* Action Buttons */
+    .action-buttons {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      margin-top: 15px;
+    }
+
+    .action-btn {
+      padding: 12px 25px;
+      font-size: 1.2rem;
+      font-family: inherit;
+      border: 4px solid #FF9800;
+      border-radius: 12px;
+      background: white;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .action-btn:hover {
+      background: #FF9800;
+      color: white;
+    }
+
+    .action-btn.check {
+      border-color: #4CAF50;
+    }
+
+    .action-btn.check:hover {
+      background: #4CAF50;
+    }
+
+    .action-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* Animal Breathing Section */
+    .animal-display {
+      text-align: center;
+      margin-bottom: 15px;
+    }
+
+    .animal-icon {
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 10px;
+    }
+
+    .animal-icon svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .animal-name {
+      font-size: 1.6rem;
+      color: #1976d2;
+      font-weight: bold;
+      text-transform: capitalize;
+    }
+
+    .breathing-question {
+      font-size: 1.4rem;
+      color: #333;
+      text-align: center;
+      margin: 10px 0;
+    }
+
+    .breathing-choices {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+      margin-top: 15px;
+    }
+
+    .breathing-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      padding: 15px 20px;
+      font-size: 1.3rem;
+      font-family: inherit;
+      border: 5px solid #1976d2;
+      border-radius: 15px;
+      background: white;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      min-width: 100px;
+    }
+
+    .breathing-btn:hover {
+      background: #e3f2fd;
+      transform: translateY(-3px);
+    }
+
+    .breathing-btn.correct {
+      background: #c8e6c9;
+      border-color: #4CAF50;
+    }
+
+    .breathing-btn.incorrect {
+      background: #ffcdd2;
+      border-color: #f44336;
+    }
+
+    .breathing-btn:disabled {
+      cursor: not-allowed;
+      opacity: 0.8;
+    }
+
+    .organ-icon {
+      width: 50px;
+      height: 50px;
+    }
+
+    .organ-icon svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Question styling */
+    .question {
+      font-size: 1.5rem;
+      text-align: center;
+      color: #4CAF50;
+      margin: 10px 0;
+      padding: 12px;
+      background: rgba(76, 175, 80, 0.1);
+      border-radius: var(--border-radius);
+    }
+
+    /* Word Bank Modal */
+    .word-bank-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      padding: 12px 20px;
+      font-size: 1.1rem;
+      font-family: inherit;
+      border: 4px solid #9c27b0;
+      border-radius: 25px;
+      background: white;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      z-index: 100;
+      transition: all 0.2s ease;
+    }
+
+    .word-bank-btn:hover {
+      background: #9c27b0;
+      color: white;
+      transform: scale(1.05);
+    }
+
+    .word-bank-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.6);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .word-bank-modal.show {
+      display: flex;
+    }
+
+    .word-bank-content {
+      background: white;
+      border-radius: var(--border-radius);
+      padding: 25px;
+      max-width: 450px;
+      max-height: 80vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+
+    .word-bank-content h2 {
+      color: #4CAF50;
+      text-align: center;
+      margin-bottom: 15px;
+    }
+
+    .word-bank-section {
+      margin-bottom: 15px;
+    }
+
+    .word-bank-section h3 {
+      color: #666;
+      font-size: 1.1rem;
+      margin-bottom: 8px;
+      border-bottom: 2px solid #eee;
+      padding-bottom: 5px;
+    }
+
+    .word-bank-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .word-bank-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      background: #f5f5f5;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-size: 1rem;
+    }
+
+    .word-bank-item:hover {
+      background: #e8f5e9;
+      transform: scale(1.02);
+    }
+
+    .word-bank-close {
+      display: block;
+      margin: 15px auto 0;
+      padding: 10px 30px;
+      font-size: 1.1rem;
+      font-family: inherit;
+      border: 3px solid #9c27b0;
+      border-radius: 15px;
+      background: #9c27b0;
+      color: white;
+      cursor: pointer;
+    }
+
+    /* Responsive */
+    @media (max-width: 500px) {
+      .card-3d-container {
+        width: 280px;
+      }
+
+      .item-icon, .animal-icon {
+        width: 80px;
+        height: 80px;
+      }
+
+      .health-btn {
+        min-width: 100px;
+        padding: 12px 18px;
+        font-size: 1.1rem;
+      }
+
+      .sentence-row {
+        font-size: 1.1rem;
+      }
+
+      .blank-slot {
+        min-width: 70px;
+        height: 35px;
+      }
+
+      .word-tile {
+        padding: 8px 14px;
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header -->
+    <header class="header-game">
+      <div class="header-left">
+        <a href="../../index.html" class="home-btn">&#127968;</a>
+        <span class="header-title">&#127793; Staying Alive</span>
+      </div>
+      <div class="header-right">
+        <button id="sound-toggle" class="toggle-btn active">&#128266;</button>
+        <button id="voice-toggle" class="toggle-btn active">&#128483;</button>
+      </div>
+    </header>
+
+    <!-- Game Area -->
+    <div class="game-area" id="game-area">
+      <div class="score-display">
+        <h3>Stars: <span id="current-stars">&#9733;&#9733;&#9733;</span></h3>
+      </div>
+
+      <div class="round-indicator">
+        Round <span id="current-round">1</span> of <span id="total-rounds">10</span>
+      </div>
+
+      <div class="question" id="question"></div>
+
+      <!-- 3D Card for round content -->
+      <div class="card-3d-container">
+        <div class="card-3d" id="game-card">
+          <div class="card-3d-face" id="card-content">
+            <!-- Dynamic content here -->
+          </div>
+        </div>
+      </div>
+
+      <div class="feedback hidden" id="feedback"></div>
+    </div>
+
+    <!-- Game Complete Screen -->
+    <div class="game-area game-complete hidden" id="game-complete">
+      <h2>&#127881; Great Job! &#127881;</h2>
+      <div class="final-stars" id="final-stars"></div>
+      <p id="final-message">You did amazing!</p>
+      <p>You scored <span id="final-score">0</span> out of <span id="final-total">10</span> points!</p>
+      <button class="play-btn" id="play-again-btn">Play Again!</button>
+    </div>
+  </div>
+
+  <!-- Word Bank Button -->
+  <button class="word-bank-btn" id="word-bank-btn">&#128218; Words</button>
+
+  <!-- Word Bank Modal -->
+  <div class="word-bank-modal" id="word-bank-modal">
+    <div class="word-bank-content">
+      <h2>&#127793; Staying Alive Words</h2>
+      <div id="word-bank-sections"></div>
+      <button class="word-bank-close" id="word-bank-close">Close</button>
+    </div>
+  </div>
+
+  <script src="../../shared/ui.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>

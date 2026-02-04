@@ -63,6 +63,18 @@ Learn body parts through interactive activities:
 - Scoring: 1 point for correct on first try, 0.5 for retry, 0 otherwise
 - Stars: 3 stars >= 8 points, 2 stars >= 6, 1 star >= 4
 
+### 6. Staying Alive Game
+Learn about what living things need to survive:
+- 10 rounds with 3 different mini-game types:
+  - **Healthy vs Not Healthy** (5 rounds): Identify if food is healthy or unhealthy
+  - **Finish the Sentences** (3 rounds): Fill blanks using word bank (air, water, food, alive, etc.)
+  - **How Animals Breathe** (2 rounds): Match animals to their breathing method (lungs/gills/skin)
+- Healthy foods: fruit, vegetables, rice, seafood, meat, pasta, milk, water
+- Unhealthy foods: cupcake, sweets, ketchup, pizza, fried chicken, french fries, soda
+- Animals: fish (gills), human (lungs), frog (skin), worm (skin)
+- Scoring: 1 point for correct on first try, 0.5 for retry, 0 otherwise
+- Stars: 3 stars >= 8 points, 2 stars >= 6, 1 star >= 4
+
 ## Project Structure
 
 ```
@@ -86,9 +98,12 @@ kids-3d-english/
     ├── positions/
     │   ├── index.html      # Positions game page
     │   └── game.js         # Positions game logic (3 round types)
-    └── our-bodies/
-        ├── index.html      # Our Bodies game page
-        └── game.js         # Our Bodies game logic (3 round types)
+    ├── our-bodies/
+    │   ├── index.html      # Our Bodies game page
+    │   └── game.js         # Our Bodies game logic (3 round types)
+    └── staying-alive/
+        ├── index.html      # Staying Alive game page
+        └── game.js         # Staying Alive game logic (3 round types)
 ```
 
 ## How to Add a New Game
@@ -309,6 +324,62 @@ const FEET_DATA = {
 To add a new child:
 1. Add to the `children` array with their correct brick count
 2. Add their name to `brickOptions` with 3 multiple-choice numbers (include the correct answer)
+
+## Editing the Staying Alive Game
+
+### Adding/Editing Foods
+
+In `games/staying-alive/game.js`, find the food arrays:
+
+```javascript
+// Healthy foods
+const HEALTHY_FOODS = [
+  { name: 'fruit', icon: 'fruit', explanation: 'Fruit gives you vitamins!' },
+  // Add more healthy foods...
+];
+
+// Unhealthy foods
+const UNHEALTHY_FOODS = [
+  { name: 'cupcake', icon: 'cupcake', explanation: 'Too much sugar is not healthy.' },
+  // Add more unhealthy foods...
+];
+```
+
+Note: You'll also need to add an SVG icon for new foods in the `FOOD_ICONS` object.
+
+### Adding/Editing Sentence Fill Rounds
+
+Find the `SENTENCE_ROUNDS` array:
+
+```javascript
+const SENTENCE_ROUNDS = [
+  {
+    sentences: [
+      { text: 'All animals need', blank: 'air', prefix: '', suffix: '.' },
+      { text: 'All animals need', blank: 'water', prefix: '', suffix: '.' }
+    ],
+    wordBank: ['air', 'water', 'shelter', 'breathe']  // Include correct answers + distractors
+  },
+  // Add more rounds (each round has 2 sentences)...
+];
+```
+
+### Adding/Editing Animals and Breathing Methods
+
+Find the `ANIMALS` array:
+
+```javascript
+const ANIMALS = [
+  { name: 'fish', breathesWith: 'gills', explanation: 'A fish uses gills to breathe underwater!' },
+  { name: 'human', breathesWith: 'lungs', explanation: 'Humans use lungs to breathe air!' },
+  { name: 'frog', breathesWith: 'skin', explanation: 'A frog can breathe through its skin!' },
+  // Add more animals...
+];
+
+const BREATHING_OPTIONS = ['lungs', 'gills', 'skin'];  // Update if adding new breathing methods
+```
+
+Note: You'll also need to add an SVG icon for new animals in the `ANIMAL_ICONS` object and for new organs in `ORGAN_ICONS`.
 
 ## Shared Utilities (window.GameUtils)
 
