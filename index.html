@@ -132,6 +132,36 @@
           Best: <span id="stars-staying-alive">&#9733;&#9733;&#9733;</span>
         </div>
       </a>
+
+      <!-- Moving Things Game -->
+      <a href="games/moving-things/index.html" class="game-card" id="card-moving-things">
+        <div class="game-card-icon">&#128168;</div>
+        <h2>Moving Things</h2>
+        <p>Push, pull, jump, spin - forces everywhere!</p>
+        <div class="best-stars">
+          Best: <span id="stars-moving-things">&#9733;&#9733;&#9733;</span>
+        </div>
+      </a>
+
+      <!-- Travel & Vehicles Game -->
+      <a href="games/travel/index.html" class="game-card" id="card-travel">
+        <div class="game-card-icon">&#9992;</div>
+        <h2>Travel &amp; Vehicles</h2>
+        <p>Cars, planes, boats - how do we travel?</p>
+        <div class="best-stars">
+          Best: <span id="stars-travel">&#9733;&#9733;&#9733;</span>
+        </div>
+      </a>
+
+      <!-- Measure Game -->
+      <a href="games/measure/index.html" class="game-card" id="card-measure">
+        <div class="game-card-icon">&#9878;</div>
+        <h2>Measure</h2>
+        <p>Heavy or light? Hot or cold? Full or empty?</p>
+        <div class="best-stars">
+          Best: <span id="stars-measure">&#9733;&#9733;&#9733;</span>
+        </div>
+      </a>
     </div>
 
     <!-- Progress Section -->
@@ -161,6 +191,18 @@
         <div class="progress-item">
           <span>&#127793; Staying Alive</span>
           <span id="progress-staying-alive" class="stars"></span>
+        </div>
+        <div class="progress-item">
+          <span>&#128168; Moving Things</span>
+          <span id="progress-moving-things" class="stars"></span>
+        </div>
+        <div class="progress-item">
+          <span>&#9992; Travel &amp; Vehicles</span>
+          <span id="progress-travel" class="stars"></span>
+        </div>
+        <div class="progress-item">
+          <span>&#9878; Measure</span>
+          <span id="progress-measure" class="stars"></span>
         </div>
       </div>
     </section>
@@ -201,6 +243,21 @@
       const stayingAliveStars = Settings.getBestStars('staying_alive');
       document.getElementById('stars-staying-alive').innerHTML = renderStars(stayingAliveStars);
       document.getElementById('progress-staying-alive').innerHTML = renderStars(stayingAliveStars);
+
+      // Moving Things game stars
+      const movingThingsStars = Settings.getBestStars('moving_things');
+      document.getElementById('stars-moving-things').innerHTML = renderStars(movingThingsStars);
+      document.getElementById('progress-moving-things').innerHTML = renderStars(movingThingsStars);
+
+      // Travel & Vehicles game stars
+      const travelStars = Settings.getBestStars('travel');
+      document.getElementById('stars-travel').innerHTML = renderStars(travelStars);
+      document.getElementById('progress-travel').innerHTML = renderStars(travelStars);
+
+      // Measure game stars
+      const measureStars = Settings.getBestStars('measure');
+      document.getElementById('stars-measure').innerHTML = renderStars(measureStars);
+      document.getElementById('progress-measure').innerHTML = renderStars(measureStars);
 
       // Play sound on card click
       document.querySelectorAll('.game-card').forEach(card => {
