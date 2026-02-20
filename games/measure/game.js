@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  const { Settings, Audio, Speech, setup3DCard, renderStars, shuffleArray, pickRandom } = window.GameUtils;
+  const { Settings, Audio, Speech, renderStars, shuffleArray, pickRandom } = window.GameUtils;
 
   // ============================================
   // GAME DATA - 30+ questions, 10 per game
@@ -441,10 +441,7 @@
     totalRounds: document.getElementById('total-rounds'),
     currentStars: document.getElementById('current-stars'),
     question: document.getElementById('question'),
-    gameCard: document.getElementById('game-card'),
-    cardContent: document.getElementById('card-content'),
-    flatContent: document.getElementById('flat-content'),
-    cardContainer: document.querySelector('.card-3d-container'),
+    gameContent: document.getElementById('game-content'),
     feedback: document.getElementById('feedback'),
     finalStars: document.getElementById('final-stars'),
     finalScore: document.getElementById('final-score'),
@@ -476,7 +473,6 @@
     elements.gameArea.classList.remove('hidden');
     elements.gameComplete.classList.add('hidden');
 
-    setup3DCard(elements.gameCard);
     updateStarsDisplay();
     nextRound();
 
@@ -497,11 +493,7 @@
     elements.currentRound.textContent = gameState.currentRound;
     elements.feedback.classList.add('hidden');
     elements.feedback.className = 'feedback hidden';
-    elements.gameCard.classList.remove('bounce', 'shake');
-
-    // Reset containers
-    elements.cardContainer.classList.remove('hidden');
-    elements.flatContent.classList.add('hidden');
+    elements.gameContent.classList.remove('bounce', 'shake');
 
     const q = gameState.roundSequence[gameState.currentRound - 1];
 
@@ -531,9 +523,9 @@
       </div>
     `;
 
-    elements.cardContent.innerHTML = html;
+    elements.gameContent.innerHTML = html;
 
-    const buttons = elements.cardContent.querySelectorAll('.choice-btn');
+    const buttons = elements.gameContent.querySelectorAll('.choice-btn');
     buttons.forEach(btn => {
       btn.addEventListener('click', () => handleChoice(btn, q.answer, q.speech));
     });
@@ -544,7 +536,7 @@
   function handleChoice(button, correctAnswer, speechText) {
     const choice = button.dataset.choice;
     const isCorrect = choice === correctAnswer;
-    const allButtons = elements.cardContent.querySelectorAll('.choice-btn');
+    const allButtons = elements.gameContent.querySelectorAll('.choice-btn');
 
     if (isCorrect) {
       button.classList.add('correct');
@@ -554,7 +546,7 @@
       gameState.score += points;
 
       Audio.playSuccess();
-      elements.gameCard.classList.add('bounce');
+      elements.gameContent.classList.add('bounce');
 
       elements.feedback.textContent = speechText;
       elements.feedback.className = 'feedback success';
@@ -568,7 +560,7 @@
     } else {
       button.classList.add('incorrect');
       Audio.playError();
-      elements.gameCard.classList.add('shake');
+      elements.gameContent.classList.add('shake');
 
       if (!gameState.hasRetried) {
         gameState.hasRetried = true;
@@ -581,7 +573,7 @@
           button.classList.remove('incorrect');
           button.disabled = true;
           elements.feedback.classList.add('hidden');
-          elements.gameCard.classList.remove('shake');
+          elements.gameContent.classList.remove('shake');
         }, 1000);
       } else {
         allButtons.forEach(btn => {
@@ -611,10 +603,6 @@
   function displaySentenceRound(q) {
     elements.question.textContent = 'Fill in the blanks!';
 
-    // Hide 3D card, show flat content
-    elements.cardContainer.classList.add('hidden');
-    elements.flatContent.classList.remove('hidden');
-
     let html = '<div class="sentences-container">';
     q.sentences.forEach((sentence, idx) => {
       html += `
@@ -640,10 +628,10 @@
       </div>
     `;
 
-    elements.flatContent.innerHTML = html;
+    elements.gameContent.innerHTML = html;
 
-    const wordTiles = elements.flatContent.querySelectorAll('.word-tile');
-    const blankSlots = elements.flatContent.querySelectorAll('.blank-slot');
+    const wordTiles = elements.gameContent.querySelectorAll('.word-tile');
+    const blankSlots = elements.gameContent.querySelectorAll('.blank-slot');
 
     wordTiles.forEach(tile => {
       tile.addEventListener('click', () => {
@@ -696,8 +684,8 @@
   }
 
   function handleSentenceCheck(q) {
-    const blankSlots = elements.flatContent.querySelectorAll('.blank-slot');
-    const wordTiles = elements.flatContent.querySelectorAll('.word-tile');
+    const blankSlots = elements.gameContent.querySelectorAll('.blank-slot');
+    const wordTiles = elements.gameContent.querySelectorAll('.word-tile');
     let allCorrect = true;
 
     blankSlots.forEach(slot => {
@@ -721,7 +709,7 @@
       const points = gameState.hasRetried ? 0.5 : 1;
       gameState.score += points;
       Audio.playSuccess();
-      elements.gameCard.classList.add('bounce');
+      elements.gameContent.classList.add('bounce');
 
       elements.feedback.textContent = 'Great job! All correct!';
       elements.feedback.className = 'feedback success';
@@ -735,7 +723,7 @@
     } else if (!gameState.hasRetried) {
       gameState.hasRetried = true;
       Audio.playError();
-      elements.gameCard.classList.add('shake');
+      elements.gameContent.classList.add('shake');
 
       elements.feedback.textContent = 'Some are wrong. Try again!';
       elements.feedback.className = 'feedback error';
@@ -754,7 +742,7 @@
         gameState.sentenceAnswers = {};
         document.getElementById('clear-btn').disabled = false;
         elements.feedback.classList.add('hidden');
-        elements.gameCard.classList.remove('shake');
+        elements.gameContent.classList.remove('shake');
       }, 1500);
     } else {
       Audio.playError();
