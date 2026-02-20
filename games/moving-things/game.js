@@ -295,6 +295,8 @@
     question: document.getElementById('question'),
     gameCard: document.getElementById('game-card'),
     cardContent: document.getElementById('card-content'),
+    flatContent: document.getElementById('flat-content'),
+    cardContainer: document.querySelector('.card-3d-container'),
     feedback: document.getElementById('feedback'),
     finalStars: document.getElementById('final-stars'),
     finalScore: document.getElementById('final-score'),
@@ -359,6 +361,10 @@
     elements.feedback.classList.add('hidden');
     elements.feedback.className = 'feedback hidden';
     elements.gameCard.classList.remove('bounce', 'shake');
+
+    // Reset containers
+    elements.cardContainer.classList.remove('hidden');
+    elements.flatContent.classList.add('hidden');
 
     const roundInfo = gameState.roundSequence[gameState.currentRound - 1];
 
@@ -581,6 +587,10 @@
   function displaySentenceRound(roundData) {
     elements.question.textContent = 'Fill in the blanks!';
 
+    // Hide 3D card, show flat content
+    elements.cardContainer.classList.add('hidden');
+    elements.flatContent.classList.remove('hidden');
+
     let html = '<div class="sentences-container">';
 
     roundData.sentences.forEach((sentence, idx) => {
@@ -607,11 +617,11 @@
       </div>
     `;
 
-    elements.cardContent.innerHTML = html;
+    elements.flatContent.innerHTML = html;
 
     // Setup word tile handlers
-    const wordTiles = elements.cardContent.querySelectorAll('.word-tile');
-    const blankSlots = elements.cardContent.querySelectorAll('.blank-slot');
+    const wordTiles = elements.flatContent.querySelectorAll('.word-tile');
+    const blankSlots = elements.flatContent.querySelectorAll('.blank-slot');
 
     wordTiles.forEach(tile => {
       tile.addEventListener('click', () => {
@@ -671,8 +681,8 @@
   }
 
   function handleSentenceCheck(roundData) {
-    const blankSlots = elements.cardContent.querySelectorAll('.blank-slot');
-    const wordTiles = elements.cardContent.querySelectorAll('.word-tile');
+    const blankSlots = elements.flatContent.querySelectorAll('.blank-slot');
+    const wordTiles = elements.flatContent.querySelectorAll('.word-tile');
     let allCorrect = true;
 
     blankSlots.forEach(slot => {
